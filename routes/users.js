@@ -9,8 +9,8 @@ router.post("/", async (req, res) => {
   const { error } = validate(req.body);
   if (error) return res.status(400).send(error.details[0].message);
 
-  let user = User.find({ email: req.body.email });
-  if (user.email) return res.status(400).send("Email Id already exists");
+  let user = await User.findOne({ email: req.body.email });
+  if (user) return res.status(400).send("Email Id already exists");
 
   user = new User(_.pick(req.body, ["name", "email", "password"]));
 
